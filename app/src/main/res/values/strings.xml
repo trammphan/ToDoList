@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">ToDoList</string>
+    <string name="addtask_title">Add Task</string>
+    <string name="addlist_title">Add List</string>
+    <string name="list_choice">Choose List</string>
+    <string name="priority_choice">Choose Priority Level</string>
+    <string name="task_name">Task Name</string>
+    <string name="description">Detailed Task Description</string>
+    <string name="deadline">Deadline</string>
+    <string name="back_button">Back</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
