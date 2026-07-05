@@ -11,5 +11,7 @@ data class TaskEntity(
     val category: String, // Tương ứng với selectedList trong AddTaskUiState
     val priority: String?, // Tương ứng với PriorityLevel.label
     val deadline: String,
-    val isDone: Boolean = false
+    val isDone: Boolean = false,
+
+    val isPinned: Boolean = false
 )

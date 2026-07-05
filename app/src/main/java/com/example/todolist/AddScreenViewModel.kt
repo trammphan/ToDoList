@@ -190,6 +190,7 @@ class AddScreenViewModel(private val dao: ToDoDao): ViewModel() {
 
                     updateTitle(task.title)
                     updateDescription(task.description)
+                    updateIsFocus(task.isPinned)
 
                     _uiState.update { state ->
                         state.copy(
@@ -243,7 +244,9 @@ class AddScreenViewModel(private val dao: ToDoDao): ViewModel() {
             // Nếu không chọn lịch, Deadline sẽ lưu chuỗi rỗng ""
             deadline = currentData.selectedDateTime,
 
-            isDone = currentTaskIsDone
+            isDone = currentTaskIsDone,
+
+            isPinned = isFocus
         )
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -260,7 +263,7 @@ class AddScreenViewModel(private val dao: ToDoDao): ViewModel() {
 
     // Hàm ép công việc thành "Chưa hoàn thành" rồi lưu
     fun markAsUndoneAndSave(): Boolean {
-        currentTaskIsDone = false // Gỡ dấu tick
+        currentTaskIsDone = false // Gỡ dấu tickF
         return saveTask()
     }
 }
