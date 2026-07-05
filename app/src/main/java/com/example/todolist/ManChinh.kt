@@ -29,6 +29,7 @@ import com.example.todolist.ui.MainViewModel
 import com.example.todolist.ui.theme.ToDoListTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import androidx.compose.material.icons.filled.Menu
 
 fun getPriorityColor(priority: String?): Color {
     return when (priority) {
@@ -48,6 +49,9 @@ fun Manchinh(
     onDetailButonCliked: (TaskEntity) -> Unit = {_ ->},
     onAddTaskButtonClicked: () -> Unit = {}
 ) {
+    var showFilterMenu by remember { mutableStateOf(false) }
+    var currentFilter by remember { mutableStateOf("Tất cả") }
+
     val allTasks by viewModel.allTasks.collectAsState()
     val categoriesEntities by viewModel.categories.collectAsState()
     val categories = categoriesEntities.map { it.name }
@@ -75,6 +79,63 @@ fun Manchinh(
                         style = MaterialTheme.typography.titleLarge,
                         fontSize = 40.sp
                     )
+                },
+                actions = {
+                    Box(modifier = Modifier.wrapContentSize(Alignment.TopEnd)) {
+                        IconButton(onClick = { showFilterMenu = true }) {
+                            // Dùng tạm icon menu hoặc bạn có thể import icon Filter nếu muốn
+                            Icon(
+                                imageVector = Icons.Default.Menu,
+                                contentDescription = "Bộ lọc công việc"
+                            )
+                        }
+
+                        DropdownMenu(
+                            expanded = showFilterMenu,
+                            onDismissRequest = { showFilterMenu = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("Tất cả công việc") },
+                                onClick = { currentFilter = "Tất cả"; showFilterMenu = false }
+                            )
+                            HorizontalDivider() // Đường kẻ ngang phân tách
+
+                            DropdownMenuItem(
+                                text = { Text("📌 Đã ghim") },
+                                onClick = { currentFilter = "Ghim"; showFilterMenu = false }
+                            )
+                            HorizontalDivider()
+
+                            // Nhóm Độ ưu tiên
+                            DropdownMenuItem(
+                                text = { Text("🔴  Do First") },
+                                onClick = { currentFilter = "Do First"; showFilterMenu = false }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("🟠  Do Next") },
+                                onClick = { currentFilter = "Do Next"; showFilterMenu = false }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("🔵  Do Later") },
+                                onClick = { currentFilter = "Do Later"; showFilterMenu = false }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("🟢  Do Last") },
+                                onClick = { currentFilter = "Do Last"; showFilterMenu = false }
+                            )
+                            HorizontalDivider()
+
+                            // Nhóm Trạng thái Checkbox
+                            DropdownMenuItem(
+                                text = { Text("✅ DONE") },
+                                onClick = { currentFilter = "Đã check"; showFilterMenu = false }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("⬜ UNDONE") },
+                                onClick = { currentFilter = "Chưa check"; showFilterMenu = false }
+                            )
+                        }
+                    }
                 },
                 windowInsets = TopAppBarDefaults.windowInsets
                     .exclude(WindowInsets.statusBars)
@@ -181,15 +242,26 @@ fun Manchinh(
                         if (index == -1) 4 else index
                     }
 
-                val filteredTasks = allTasks
-                    .filter {
-                        if (selectedCategory.value == "Ghim") {
-                            it.isPinned
-                        } else {
-                            it.category == selectedCategory.value
-                        }
+                val tasksByCategory = allTasks.filter {
+                    if (selectedCategory.value == "Ghim") {
+                        it.isPinned
+                    } else {
+                        it.category == selectedCategory.value
                     }
-                    .sortedWith(taskComparator)
+                }
+
+                val filteredTasks = tasksByCategory.filter { task ->
+                    when (currentFilter) {
+                        "Ghim" -> task.isPinned
+                        "Do First" -> task.priority == "Do First"
+                        "Do Next" -> task.priority == "Do Next"
+                        "Do Later" -> task.priority == "Do Later"
+                        "Do Last" -> task.priority == "Do Last"
+                        "Đã check" -> task.isDone
+                        "Chưa check" -> !task.isDone
+                        else -> true
+                    }
+                }   .sortedWith(taskComparator)
 
                 if (filteredTasks.isEmpty()) {
                     Box(
