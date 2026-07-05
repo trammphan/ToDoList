@@ -189,14 +189,14 @@ class AddScreenViewModel(private val dao: ToDoDao): ViewModel() {
                     currentTaskIsDone = task.isDone
 
                     updateTitle(task.title)
-                    updateDescription(task.description)
+                    updateDescription(task.description ?: "")
                     updateIsFocus(task.isPinned)
 
                     _uiState.update { state ->
                         state.copy(
                             selectedList = listOf(task.category),
                             selectedPriority = PriorityLevel.values().find { p -> p.label == task.priority },
-                            selectedDateTime = task.deadline
+                            selectedDateTime = task.deadline ?: ""
                         )
                     }
                 }
@@ -235,14 +235,14 @@ class AddScreenViewModel(private val dao: ToDoDao): ViewModel() {
         val taskToSave = TaskEntity(
             id = currentTaskId ?: 0,
             title = title,
-            description = description,
+            description = description.ifBlank { null },
             category = currentData.selectedList.first(),
 
             // Nếu người dùng không chọn, Priority sẽ được lưu là null
             priority = currentData.selectedPriority?.label,
 
             // Nếu không chọn lịch, Deadline sẽ lưu chuỗi rỗng ""
-            deadline = currentData.selectedDateTime,
+            deadline = currentData.selectedDateTime.ifBlank { null },
 
             isDone = currentTaskIsDone,
 

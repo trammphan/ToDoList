@@ -3,7 +3,7 @@ package com.example.todolist
 import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Layout
-import android.widget.Toast // BỔ SUNG IMPORT TOAST
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -72,7 +72,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext // BỔ SUNG IMPORT LOCAL CONTEXT
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
