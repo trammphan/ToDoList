@@ -270,6 +270,19 @@ fun Manchinh(
                                             textDecoration = if (task.isDone) TextDecoration.LineThrough else TextDecoration.None,
                                             color = if (task.isDone) MaterialTheme.colorScheme.outline else MaterialTheme.colorScheme.onSurface
                                         )
+                                        Spacer(modifier = Modifier.weight(0.5f))
+                                        if (task.isPinned) {
+                                            // Cách 1: Vẽ một vòng tròn màu đỏ nhỏ nhắn
+                                            Box(
+                                                modifier = Modifier
+                                                    .size(15.dp)
+                                                    .background(
+                                                        Color(0xFFE57373),
+                                                        shape = androidx.compose.foundation.shape.CircleShape
+                                                    )
+                                            )
+                                            Spacer(modifier = Modifier.width(16.dp))
+                                        }
                                     }
                                 }
                             }
